@@ -10,6 +10,6 @@ export async function sourceProjectImages(appId:string,source:ProjectImageSource
   return {assets:await (importer||importPinterest)(appId,query,boardUrl),sourcing:{requested:source,status:'pinterest',query}};}
  catch(error){if(!(error instanceof ImportError)||error.status!==502)throw error;
   const label=source==='dupe'?'Dupe photos':'Pinterest images';
-  return {assets:[],sourcing:{requested:source,status:'fallback',query,warning:`${label} unavailable for “${query}”. This draft uses relevant app assets where possible; unmatched slides are left without an image. ${error.message}`}};
+  return {assets:[],sourcing:{requested:source,status:'fallback',query,warning:`${label} unavailable for “${query}”. This draft uses relevant app assets where possible; Forge reuses the closest available app image for unmatched slides. ${error.message}`}};
  }
 }
