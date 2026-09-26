@@ -79,7 +79,7 @@ ASSET CATALOG: ${JSON.stringify(context.catalog)}`,conceptsSchema,context.paths)
   } finally {generating.delete(app.id);}
 }
 const creating=new Set<string>();
-export async function createProject(batchId:string,conceptIndex:number, provider:Pick<CodexProvider,'generateStructured'> = new CodexProvider(), options:{runId?:string;imageSourcing?:ImageSourcing;boardUrl?:string;imageSource?:'pinterest'|'local';selectedAssetIds?:string[];formula?:Formula;ratio?:keyof typeof ratios;contextAssets?:Asset[]}={}) {
+export async function createProject(batchId:string,conceptIndex:number, provider:Pick<CodexProvider,'generateStructured'> = new CodexProvider(), options:{runId?:string;imageSourcing?:ImageSourcing;boardUrl?:string;imageSource?:'dupe'|'pinterest'|'local';selectedAssetIds?:string[];formula?:Formula;ratio?:keyof typeof ratios;contextAssets?:Asset[]}={}) {
   const original=getBatch(batchId);if(!original)throw new ImportError('Concepts not found. Generate them again.',404);
   const {runId,...runOptions}=options;const batch=projectRunBatch(original,runId,runOptions);batchId=batch.id;
   batch.input={...batch.input,...options};
@@ -92,7 +92,7 @@ export async function createProject(batchId:string,conceptIndex:number, provider
     const app=getApp(batch.appId)!;
     const fetched=options.contextAssets?{assets:[],sourcing:options.imageSourcing}:await sourceProjectImages(app.id,batch.input.imageSource||'local',conceptImageQuery(concept),batch.input.boardUrl);
     const sourced=fetched.assets;
-    const local=eligibleAssets(listAssets(app.id),batch.input.type).filter(a=>a.sourceKind!=='pinterest'||batch.input.selectedAssetIds.includes(a.id));
+    const local=eligibleAssets(listAssets(app.id),batch.input.type).filter(a=>!['pinterest','dupe'].includes(a.sourceKind)||batch.input.selectedAssetIds.includes(a.id));
     const assets=options.contextAssets||chooseAssets([...sourced,...local.filter(asset=>!sourced.some(item=>item.id===asset.id))],batch.input.selectedAssetIds);
     const context=await visualContext(assets);
     const result=await provider.generateStructured(`Draft an editable ${batch.input.type} project from the selected concept.
@@ -106,7 +106,7 @@ The text will use TikTok Sans Bold with white fill and black outline. Preserve r
 APP: ${JSON.stringify({name:app.name,description:app.oneLineDescription,features:app.features})}
 CONCEPT: ${JSON.stringify(concept)}
 IMAGE AVAILABILITY: ${JSON.stringify(fetched.sourcing)}
-When Pinterest is unavailable, still write the full useful narrative. Use null for missing illustrative images; never substitute an unrelated screenshot. Do not make the whole draft an app advertisement.
+When an external image source is unavailable, still write the full useful narrative. Use null for missing illustrative images; never substitute an unrelated screenshot. Do not make the whole draft an app advertisement.
 PREVIOUS DRAFTS TO DIFFER FROM: ${JSON.stringify(getDatabase().prepare('SELECT slides FROM projects WHERE appId=? AND name=? ORDER BY createdAt DESC LIMIT 3').all(app.id,concept.title).map(row=>JSON.parse(String(row.slides)).map((s:{headline:string})=>s.headline)))}
 SELECTED: ${JSON.stringify(batch.input.selectedAssetIds)}
 CATALOG: ${JSON.stringify(context.catalog)}`,slideDraftSchema,context.paths);
