@@ -1,0 +1,7 @@
+import assert from 'node:assert/strict';
+import {writeFile} from 'node:fs/promises';
+const base='http://127.0.0.1:3000',appId='a7237d83-fe3b-4a97-a947-9ee67cf394df';
+async function post(url,body){const r=await fetch(base+url,{method:'POST',headers:{'Content-Type':'application/json',Origin:base},body:JSON.stringify(body)});const data=await r.json();assert.ok(r.ok,JSON.stringify(data));return data;}
+const start=Date.now();const batch=await post('/api/concepts',{appId,type:'slideshow',start:'surprise',idea:'',selectedAssetIds:[],formula:'hpsc',imageSource:'local'});assert.equal(batch.concepts.length,12);console.log({seconds:(Date.now()-start)/1000,hooks:batch.concepts.map(c=>c.hook)});await writeFile('/tmp/forge-copy-batch.json',JSON.stringify(batch));
+const project=await post('/api/projects',{batchId:batch.id,conceptIndex:0,formula:'hpsc',ratio:'9:16',imageSource:'local'});assert.equal(project.slides.at(-1).role,'CTA');assert.equal(project.slides.at(-1).body,'Download on the App Store');console.log({project:project.id,slides:project.slides.map(s=>({role:s.role,headline:s.headline,body:s.body}))});await writeFile('/tmp/forge-copy-project.json',JSON.stringify(project));
+const r=await fetch(base+`/api/projects/${project.id}`,{method:'PUT',headers:{'Content-Type':'application/json',Origin:base},body:JSON.stringify({name:project.name,slides:project.slides.map(s=>({...s,textY:0.4})),height:1080})});const edited=await r.json();assert.ok(r.ok,JSON.stringify(edited));assert.equal(edited.style.height,1080);assert.equal(edited.slides[0].textY,0.4);

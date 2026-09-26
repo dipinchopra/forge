@@ -1,0 +1,5 @@
+import { z } from 'zod';
+import { getInspiration } from '@/lib/server/lurker';
+import { generateConcepts } from '@/lib/server/creatives';
+import { apiError,mutationGuard } from '@/lib/server/http';
+export async function POST(request:Request,{params}:{params:Promise<{id:string}>}){const blocked=mutationGuard(request);if(blocked)return blocked;try{const {appId,type}=z.object({appId:z.uuid(),type:z.enum(['slideshow','carousel','hook-demo','template-video'])}).parse(await request.json());const item=getInspiration((await params).id);if(item?.analysisStatus!=='complete')return Response.json({error:'Analyze this reference first.'},{status:400});const idea=`Remix the creative mechanic using this app's own assets; do not copy the original wording. Format: ${JSON.stringify(item.analysisJson)}`;if(type==='template-video'){return Response.json({url:`/template-videos?appId=${appId}`});}const batch=await generateConcepts({appId,type,start:'inspiration',idea:idea.slice(0,3000),inspirationId:item.id,selectedAssetIds:[]});return Response.json({url:`/?batchId=${batch.id}`});}catch(error){return apiError(error);}}

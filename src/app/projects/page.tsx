@@ -1,0 +1,6 @@
+import Link from 'next/link';
+import {listProjects} from '@/lib/server/creatives';
+import {getAsset} from '@/lib/server/assets';
+import {PageHeading} from '@/components/page-heading';
+import {ProjectThumbnail} from '@/components/project-thumbnail';
+export default async function Page({searchParams}:{searchParams:Promise<{page?:string}>}){const all=listProjects(),page=Math.max(0,Number((await searchParams).page)||0),projects=all.slice(page*24,page*24+24);return <><PageHeading eyebrow="YOUR CREATIVE LIBRARY" title="Projects" description={`${all.length} editable creatives`} action={<Link className="button" href="/">New creative</Link>}/><div className="creative-gallery">{projects.map(p=><Link key={p.id} href={`/projects/${p.id}`} className="project-card">{p.slides[0]&&<ProjectThumbnail slide={p.slides[0]} asset={p.slides[0].assetId?getAsset(p.slides[0].assetId)||undefined:undefined} height={Number(p.style.height)||1920}/>}<span className="eyebrow">{p.type}</span><h3>{p.name}</h3><small>{p.slides.length} slides · {new Date(p.updatedAt).toLocaleDateString()}</small></Link>)}</div><div className="pager">{page>0&&<Link href={`/projects?page=${page-1}`}>← Previous</Link>}<span>{page+1} / {Math.max(1,Math.ceil(all.length/24))}</span>{(page+1)*24<all.length&&<Link href={`/projects?page=${page+1}`}>Next →</Link>}</div></>;}

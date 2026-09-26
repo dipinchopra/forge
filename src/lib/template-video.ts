@@ -1,0 +1,7 @@
+import { z } from 'zod';
+export interface TemplateSet {key:string;name:string;source:string;slides:string[];}
+export const videoClipSchema=z.object({assetId:z.uuid(),caption:z.string().max(100),duration:z.number().int().min(1).max(6),motion:z.literal('swipe')});
+export const videoPlanSchema=z.object({textY:z.number().min(0.04).max(0.85).optional(),headline:z.string().max(100).optional(),cta:z.object({textY:z.number().min(0.04).max(0.85).optional(),downloadY:z.number().min(0.04).max(0.94).optional(),enabled:z.boolean(),assetId:z.uuid().nullable(),text:z.string().max(120),duration:z.number().int().min(1).max(6)}).optional(),name:z.string().min(1).max(120),templateKey:z.string().min(1),format:z.literal('template-swipe'),clips:z.array(videoClipSchema).min(1).max(30)});
+export type VideoPlan=z.infer<typeof videoPlanSchema>;
+export interface TemplateVideo {id:string;appId:string;name:string;plan:VideoPlan;status:'draft'|'rendering'|'ready'|'failed';renderPath:string|null;error:string|null;createdAt:string;updatedAt:string;}
+export const videoRequestSchema=z.object({appId:z.uuid(),idea:z.string().trim().max(2000).default(''),variations:z.number().int().min(1).max(10).default(1),count:z.number().int().min(1).max(50).default(3),templateKeys:z.array(z.string()).max(50).default([]),hold:z.number().int().min(1).max(6).default(2),caption:z.string().max(100).default(''),ctaEnabled:z.boolean().default(true),ctaAssetId:z.uuid().optional(),ctaText:z.string().max(120).default(''),randomizeCta:z.boolean().optional(),randomizeText:z.boolean().default(true)});

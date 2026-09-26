@@ -1,0 +1,13 @@
+ALTER TABLE apps ADD COLUMN sourceFolder TEXT;
+ALTER TABLE apps ADD COLUMN screenshotSource TEXT;
+ALTER TABLE apps ADD COLUMN screenshotsRefreshedAt TEXT;
+ALTER TABLE assets ADD COLUMN sourceKind TEXT NOT NULL DEFAULT 'local';
+ALTER TABLE assets ADD COLUMN sourceKey TEXT;
+ALTER TABLE assets ADD COLUMN thumbnailPath TEXT;
+ALTER TABLE assets ADD COLUMN active INTEGER NOT NULL DEFAULT 1;
+CREATE UNIQUE INDEX assets_app_content ON assets(appId,contentHash) WHERE contentHash IS NOT NULL;
+CREATE TABLE concept_batches (id TEXT PRIMARY KEY, appId TEXT NOT NULL REFERENCES apps(id) ON DELETE CASCADE, input TEXT NOT NULL CHECK(json_valid(input)), concepts TEXT NOT NULL CHECK(json_valid(concepts)), provider TEXT NOT NULL DEFAULT 'codex', createdAt TEXT NOT NULL);
+ALTER TABLE projects ADD COLUMN batchId TEXT REFERENCES concept_batches(id) ON DELETE SET NULL;
+ALTER TABLE projects ADD COLUMN conceptIndex INTEGER;
+ALTER TABLE projects ADD COLUMN style TEXT NOT NULL DEFAULT '{}' CHECK(json_valid(style));
+CREATE UNIQUE INDEX projects_batch_choice ON projects(batchId,conceptIndex) WHERE batchId IS NOT NULL;
