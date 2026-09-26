@@ -22,12 +22,12 @@ function photoTopics(type:OutputType,appName:string):Concept[]{
   ['What your vacation dump needs','what your vacation dump needs','A simple checklist for a vacation photo dump people want to save.','vacation photo dump',['Cover photo','Food or drink','View','Candid moment','Final recap']],
   ['Camera roll moments worth posting','camera roll moments worth posting','Pull out the small moments people forget to include.','camera roll memories',['The random photo','The detail','The friend shot','The place','The final mood']],
   ['Photo dump ideas when nothing happened','photo dump ideas when nothing happened','Turn ordinary days into a relatable post format.','everyday photo dump',['Mirror photo','Coffee or food','Walk or sky','Desk or room','Small win']],
-  ['A photo dump people comment on','a photo dump people comment on','Use prompts that make followers answer, relate, or ask where it was.','social photo dump',['Relatable hook','One funny photo','One pretty photo','One question','CTA']],
+  ['Which photo dump slide are you?','which photo dump slide are you?','Use prompts that make followers answer, relate, or ask where it was.','social photo dump',['Relatable hook','One funny photo','One pretty photo','One question','CTA']],
   ['Include this in every trip dump','include this in every trip dump','A trip checklist with people, place, details, and proof.','trip photo details',['Where you went','Who was there','What you ate','Small detail','Best view']],
   ['The “main character” dump checklist','main character dump checklist','A format built around mood and identity, not product pitching.','aesthetic photo dump',['Outfit','Street or room','Close detail','Blurry candid','End card']],
-  ['Boring photo dump fix','boring photo dump fix','Show what to add when a dump feels too samey.','mixed photo collage',['Problem','Add a close-up','Add a human moment','Add contrast','CTA']],
+  ['5 slides that fix a boring dump','5 slides that fix a boring dump','Show what to add when a dump feels too samey.','mixed photo collage',['Problem','Add a close-up','Add a human moment','Add contrast','CTA']],
   ['Weekend dump slide order','weekend dump slide order','A clear order for weekend recaps that feels natural.','weekend photo dump',['Best moment first','Friends','Food','Place','Small detail','End']],
-  ['The tiny details slide','the tiny details slide','Teach why detail photos make the whole dump feel richer.','travel detail photos',['Hook','Detail examples','Why it works','Where to place it','CTA']],
+  ['7 tiny details to include','7 tiny details to include','Teach why detail photos make the whole dump feel richer.','travel detail photos',['Hook','Detail examples','Why it works','Where to place it','CTA']],
   ['Photo dump prompts for comments','photo dump prompts for comments','Use interactive prompts that invite replies without sounding desperate.','instagram comments photos',['Pick a side','Guess the place','Which slide is you','Save the idea','CTA']],
  ];
  const carousel=[
@@ -42,7 +42,7 @@ function photoTopics(type:OutputType,appName:string):Concept[]{
   ['Photo dump mistakes to avoid','Photo dump mistakes to avoid','Keep it useful without pitching: too many same shots, weak first slide, no detail.','photo dump mistakes',['Same photo repeated','No cover','No people','No details','No ending']],
   ['Camera roll scavenger hunt','Camera roll scavenger hunt','A playful checklist people can use right away.','camera roll scavenger hunt',['Find a laugh','Find a view','Find a meal','Find a blur','Find a tiny thing','Build the dump']],
   ['First slide ideas for photo dumps','First slide ideas for photo dumps','Help users choose an opener that earns the swipe.','instagram carousel cover',['Best face','Best view','Clean layout','Funny moment','Before-after','Question slide']],
-  ['A dump formula people save','A dump formula people save','A repeatable structure: hook, vibe, people, place, detail, chaos, closer.','photo dump formula',['Hook','Vibe','People','Place','Detail','Chaos','Closer']],
+  ['7-slide dump formula people save','7-slide dump formula people save','A repeatable structure: hook, vibe, people, place, detail, chaos, closer.','photo dump formula',['Hook','Vibe','People','Place','Detail','Chaos','Closer']],
  ];
  return (type==='carousel'?carousel:slideshow).map(([title,hook,angle,imageQuery,outline])=>({title,hook,angle,imageQuery,outline,assetIds:[]} as Concept));
 }
