@@ -17,32 +17,32 @@ function seed(app:{name:string;oneLineDescription:string;features:string[];audie
 }
 function photoTopics(type:OutputType,appName:string):Concept[]{
  const slideshow=[
-  ['POV: your photo dump finally makes sense','POV: your photo dump finally makes sense','Turn a messy camera roll into a clean swipe story.','messy camera roll photos',['Hook the messy camera roll','Show the layout fix','Show the clean result',`Try it in ${appName}`]],
-  ['Vacation photos need an order','Your vacation photos need an order','Help travel photos feel like a story, not a random dump.','beach vacation photos',['Start with the problem','Pick one cover photo','Group tiny details','End with the finished swipe']],
-  ['Stop posting every photo alone','Stop posting every photo alone','Show how one collage can hold more moments without spam.','friends travel photos',['Call out the pain','Show too many photos','Show one clean layout','Ask them to save it']],
-  ['Your camera roll is not boring','Your camera roll is not boring','The photos are fine; the layout needs help.','summer camera roll',['Reframe the problem','Show ordinary photos','Show the better layout','Invite them to try it']],
-  ['Make random photos look planned','Make random photos look planned','Teach a simple before-and-after for scattered photos.','city travel details',['Show random photos','Add one rule','Show the polished swipe','CTA']],
-  ['One swipe for the whole trip','One swipe for the whole trip','Package a whole trip into one clean carousel-style post.','travel collage aesthetic',['Open with the promise','Show trip moments','Show the swipe result','Download CTA']],
-  ['Before you post 40 photos','Before you post 40 photos','Give a quick fix before someone dumps every image.','phone photo gallery',['Name the mistake','Pick the best moments','Build one layout','Show the final post']],
-  ['Your beach photos can look cleaner','Your beach photos can look cleaner','Use beach pictures to show a simple photo dump upgrade.','beach vacation collage',['Hook with beach photos','Show clutter','Show clean spacing','CTA']],
-  ['Make food, friends, and views fit','Make food, friends, and views fit','Show how mixed trip photos can still feel connected.','food friends travel photos',['Show mixed moments','Choose one layout style','Show connected result','Try the app']],
-  ['Turn a weekend into one post','Turn a weekend into one post','Make weekend memories easier to share.','weekend photo dump',['Weekend hook','Select moments','Show swipe layout','CTA']],
-  ['Your recap needs one cover','Your recap needs one cover','Start with a strong first slide so people keep swiping.','travel recap cover photo',['Show weak start','Choose cover photo','Add supporting shots','Finish with CTA']],
-  ['Post more photos without clutter','Post more photos without clutter','Show a simple way to share more while staying clean.','clean photo collage',['Problem','Simple layout rule','Before after','CTA']],
+  ['Things to include in your photo dump','things to include in your photo dump','A list-style post that makes people compare it with their own camera roll.','photo dump details',['Hook: things to include','People','Place','Tiny details','Messy moment','CTA']],
+  ['Photos that make people swipe','photos that make people swipe','Show the photo types that keep a dump from feeling flat.','friends travel details',['Strong first photo','People shot','Wide place shot','Tiny detail','Unexpected ending']],
+  ['What your vacation dump needs','what your vacation dump needs','A simple checklist for a vacation photo dump people want to save.','vacation photo dump',['Cover photo','Food or drink','View','Candid moment','Final recap']],
+  ['Camera roll moments worth posting','camera roll moments worth posting','Pull out the small moments people forget to include.','camera roll memories',['The random photo','The detail','The friend shot','The place','The final mood']],
+  ['Photo dump ideas when nothing happened','photo dump ideas when nothing happened','Turn ordinary days into a relatable post format.','everyday photo dump',['Mirror photo','Coffee or food','Walk or sky','Desk or room','Small win']],
+  ['A photo dump people comment on','a photo dump people comment on','Use prompts that make followers answer, relate, or ask where it was.','social photo dump',['Relatable hook','One funny photo','One pretty photo','One question','CTA']],
+  ['Include this in every trip dump','include this in every trip dump','A trip checklist with people, place, details, and proof.','trip photo details',['Where you went','Who was there','What you ate','Small detail','Best view']],
+  ['The “main character” dump checklist','main character dump checklist','A format built around mood and identity, not product pitching.','aesthetic photo dump',['Outfit','Street or room','Close detail','Blurry candid','End card']],
+  ['Boring photo dump fix','boring photo dump fix','Show what to add when a dump feels too samey.','mixed photo collage',['Problem','Add a close-up','Add a human moment','Add contrast','CTA']],
+  ['Weekend dump slide order','weekend dump slide order','A clear order for weekend recaps that feels natural.','weekend photo dump',['Best moment first','Friends','Food','Place','Small detail','End']],
+  ['The tiny details slide','the tiny details slide','Teach why detail photos make the whole dump feel richer.','travel detail photos',['Hook','Detail examples','Why it works','Where to place it','CTA']],
+  ['Photo dump prompts for comments','photo dump prompts for comments','Use interactive prompts that invite replies without sounding desperate.','instagram comments photos',['Pick a side','Guess the place','Which slide is you','Save the idea','CTA']],
  ];
  const carousel=[
-  ['5 ways to fix a photo dump','5 ways to fix your photo dump','Give five simple layout rules creators can save.','photo dump layout ideas',['Show the problem','Pick a clear cover','Group similar photos','Use white space','End with the app']],
-  ['Photo dump order that works','A simple order for photo dumps','Teach the order: cover, people, places, details, ending.','travel photo dump',['Why order matters','Cover photo','People and places','Small details','CTA']],
-  ['Make vacation photos look cleaner','Make vacation photos look cleaner','Show practical layout tips for travel photos.','vacation photo collage',['Messy vs clean','Choose one theme','Balance close and wide shots','Add the layout','CTA']],
-  ['3 mistakes that clutter carousels','3 mistakes that clutter carousels','Help users spot common carousel mistakes.','cluttered photo grid',['Mistake one','Mistake two','Mistake three','Better layout','CTA']],
-  ['Build a swipe post from 20 photos','Turn 20 photos into one swipe post','Show how to reduce a large camera roll into one post.','phone gallery travel',['Start with 20 photos','Choose a cover','Group the rest','Show final swipe','CTA']],
-  ['Clean layouts for messy moments','Clean layouts for messy moments','Teach layout choices for imperfect real photos.','candid travel photos',['Messy moments are fine','Use one strong frame','Pair small details','Leave space','CTA']],
-  ['How to choose your first slide','How to choose your first slide','Make the first slide clear enough to earn the swipe.','instagram carousel cover',['What the cover must do','Pick the best image','Add short text','Show example','CTA']],
-  ['Photo dump captions need structure','Photo dumps need a little structure','Teach why layout comes before caption.','editorial photo dump',['Start with layout','Set the mood','Arrange details','Then write caption','CTA']],
-  ['Before and after photo dump fix','Before and after photo dump fix','Show a plain before and a cleaner after.','before after collage',['Before','What changed','Why it works','How to copy it','CTA']],
-  ['Travel carousel checklist','Travel carousel checklist','Give a saveable checklist for travel posts.','travel checklist photos',['Cover','People','Place','Details','CTA']],
-  ['Make small moments look bigger','Make small moments look bigger','Show how tiny details can anchor a post.','coffee beach travel detail',['Pick small moments','Give them space','Pair with wide shots','Show result','CTA']],
-  ['Simple photo dump layout formula','Simple photo dump layout formula','Give a repeatable layout formula for creators.','minimal collage layout',['One hero photo','Two detail photos','One result slide','Repeat the formula','CTA']],
+  ['Things to include in your photo dump','Things to include in your photo dump','A saveable checklist of photo types: cover, people, place, food, details, and chaos.','photo dump checklist',['Cover photo','People photo','Place photo','Food or drink','Tiny detail','Messy moment']],
+  ['10 photos that make a dump better','10 photos that make a dump better','List concrete photo types people can hunt for in their camera roll.','camera roll photo ideas',['The cover','The laugh','The view','The close-up','The receipt','The ending']],
+  ['Photo dump checklist for trips','Photo dump checklist for trips','A travel-specific checklist built for saves and shares.','travel photo checklist',['Where you went','Who came','What you ate','What surprised you','Best view','Final mood']],
+  ['What to post from a normal day','What to post from a normal day','Make everyday photo dumps feel easy and relatable.','everyday photo ideas',['Outfit','Coffee or snack','Sky or street','Desk or room','Small win','Funny detail']],
+  ['Slides your photo dump is missing','Slides your photo dump is missing','Point out missing slide types that make people want to improve their next post.','photo dump missing slides',['A clear opener','A people slide','A texture slide','A funny slide','A quiet slide','A closer']],
+  ['Photo dump prompts people answer','Photo dump prompts people answer','Give engagement prompts that invite comments naturally.','social media photo prompts',['Which slide are you','Guess the place','Pick the best photo','Rate the weekend','Save this list']],
+  ['The perfect weekend dump order','The perfect weekend dump order','Show a repeatable slide order for weekend recaps.','weekend photo dump order',['Best moment','People','Food','Place','Tiny detail','Ending']],
+  ['Tiny details to include','Tiny details to include','Teach detail shots that make posts feel more personal.','detail photos aesthetic',['Hands','Receipts','Food close-up','Shoes','Room corner','Street sign']],
+  ['Photo dump mistakes to avoid','Photo dump mistakes to avoid','Keep it useful without pitching: too many same shots, weak first slide, no detail.','photo dump mistakes',['Same photo repeated','No cover','No people','No details','No ending']],
+  ['Camera roll scavenger hunt','Camera roll scavenger hunt','A playful checklist people can use right away.','camera roll scavenger hunt',['Find a laugh','Find a view','Find a meal','Find a blur','Find a tiny thing','Build the dump']],
+  ['First slide ideas for photo dumps','First slide ideas for photo dumps','Help users choose an opener that earns the swipe.','instagram carousel cover',['Best face','Best view','Clean layout','Funny moment','Before-after','Question slide']],
+  ['A dump formula people save','A dump formula people save','A repeatable structure: hook, vibe, people, place, detail, chaos, closer.','photo dump formula',['Hook','Vibe','People','Place','Detail','Chaos','Closer']],
  ];
  return (type==='carousel'?carousel:slideshow).map(([title,hook,angle,imageQuery,outline])=>({title,hook,angle,imageQuery,outline,assetIds:[]} as Concept));
 }
@@ -64,7 +64,7 @@ export function ideaBank(appId:string,type:OutputType):ConceptBatch {
  const rows=getDatabase().prepare('SELECT id FROM concept_batches WHERE appId=? AND json_extract(input,\'$.type\')=? AND createdAt>=? ORDER BY createdAt DESC LIMIT 20').all(appId,type,app.updatedAt);
  for(const row of rows){const batch=getBatch(String(row.id));if(batch&&batch.concepts.length>=10&&batch.input.formula&&batch.provider==='topics-v1')return batch;}
  const concepts=(seed(app).isPhoto?photoTopics(type,app.name):genericTopics(type,app)).slice(0,12);
- const batch:ConceptBatch={id:randomUUID(),appId,input:{appId,type,start:'surprise',idea:'',selectedAssetIds:[],imageSource:'dupe',formula:'hpsc'},concepts,provider:'topics-v1',createdAt:new Date().toISOString()};
+ const batch:ConceptBatch={id:randomUUID(),appId,input:{appId,type,start:'surprise',idea:'',selectedAssetIds:[],imageSource:'dupe',formula:'hpsc',slideCount:6},concepts,provider:'topics-v1',createdAt:new Date().toISOString()};
  getDatabase().prepare('INSERT INTO concept_batches(id,appId,input,concepts,provider,createdAt) VALUES(?,?,?,?,?,?)').run(batch.id,appId,JSON.stringify(batch.input),JSON.stringify(concepts),batch.provider,batch.createdAt);
  return batch;
 }
