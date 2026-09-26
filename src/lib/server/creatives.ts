@@ -126,7 +126,7 @@ CATALOG: ${JSON.stringify(context.catalog)}`,slideDraftSchemaFor(slideCount),con
       if(!result.slides.some(slide=>slide.assetId===id))result.slides[index].assetId=id;
     });
     const brand=local.find(a=>a.category==='BRAND'&&/app.?store|download/i.test(a.filename))||local.find(a=>a.category==='BRAND'&&/logo|icon/i.test(a.filename))||local.find(a=>a.category==='BRAND')||local.find(a=>a.sourceKind==='app-store');
-    const slides:Slide[]=result.slides.map((slide,index)=>({...slide,id:randomUUID(),position:index,template:'tiktok-outlined',textEmphasis:[],textY:0.08,role:formulas[batch.input.formula||'hpsc'].steps[index]||'SOLUTION'}));
+    const slides:Slide[]=result.slides.map((slide,index)=>({...slide,id:randomUUID(),position:index,template:'tiktok-outlined',textEmphasis:[],textY:0.3,imageZoom:1,role:formulas[batch.input.formula||'hpsc'].steps[index]||'SOLUTION'}));
     Object.assign(slides[slides.length-1],{role:'CTA',headline:`Try ${app.name}`,body:'Download on the App Store',assetId:brand?.id||slides[slides.length-1].assetId});
     const id=randomUUID(),now=new Date().toISOString();
     const style={...slideshowStyle,imageSourcing:fetched.sourcing,height:batch.input.ratio?ratios[batch.input.ratio]:batch.input.type==='carousel'?1350:1920,formula:batch.input.formula||'hpsc'};

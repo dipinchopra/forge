@@ -8,9 +8,9 @@ export async function drawSlide(canvas:HTMLCanvasElement,slide:Slide,asset:Asset
  const image=asset?.type==='image'?await new Promise<HTMLImageElement>((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Could not load this image.'));img.src=`/api/assets/${asset.id}/media${/\.(jpg|jpeg|png|webp|avif|gif)$/i.test(asset.path)?'':'?thumbnail=1'}`;}):null;
  canvas.width=1080;canvas.height=height;const ctx=canvas.getContext('2d')!;ctx.fillStyle='#000000';ctx.fillRect(0,0,1080,height);
  const cta=slide.role==='CTA';
- if(image){const logo=cta&&asset?.category==='BRAND'&&/logo|icon/i.test(asset.filename);const boxW=logo?300:cta?760:1080,boxH=logo?300:cta?height*0.53:height;const source=cropRect(slide.crop,image.naturalWidth,image.naturalHeight);const scale=Math.min(boxW/source.width,boxH/source.height);const w=source.width*scale,h=source.height*scale;ctx.drawImage(image,source.x,source.y,source.width,source.height,(1080-w)/2,(height-h)/2,w,h);}
+ if(image){const logo=cta&&asset?.category==='BRAND'&&/logo|icon/i.test(asset.filename);const boxW=logo?300:cta?760:1080,boxH=logo?300:cta?height*0.53:height;const source=cropRect(slide.crop,image.naturalWidth,image.naturalHeight);const scale=Math.min(boxW/source.width,boxH/source.height)*(slide.imageZoom??1);const w=source.width*scale,h=source.height*scale;ctx.drawImage(image,source.x,source.y,source.width,source.height,(1080-w)/2,(height-h)/2,w,h);}
  const heading=fit(ctx,slide.headline,68,3),body=fit(ctx,cta?slide.body||'Download on the App Store':slide.body,40,3),gap=body.lines.length?26:0,margin=height===1920?120:80;
- const y=safeTextTop((slide.textY??0.08)*height,heading.height+(cta?0:gap+body.height),height,margin);
+ const y=safeTextTop((slide.textY??0.3)*height,heading.height+(cta?0:gap+body.height),height,margin);
  paint(ctx,heading,y);
  paint(ctx,body,cta?safeTextTop(height-margin-body.height,body.height,height,margin):y+heading.height+gap);
 }

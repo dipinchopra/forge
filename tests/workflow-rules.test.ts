@@ -39,7 +39,15 @@ test('template folder identity and numeric order survive dedup; full-length hook
 test('crop coordinates remain bounded and edits preserve crop settings',async()=>{
  const {cropRect}=await import('../src/lib/crop');const {projectEditSchema}=await import('../src/lib/creative');
  assert.deepEqual(cropRect({x:0.25,y:0.1,width:0.5,height:0.6},1000,2000),{x:250,y:200,width:500,height:1200});
- const slide={id:'e579e7ae-5bb9-4e12-a5d3-c220d59d306a',position:0,headline:'Keep this part',body:'',assetQuery:'',assetId:null,template:'tiktok-outlined',textEmphasis:[],crop:{x:0.1,y:0.2,width:0.7,height:0.6}};
- assert.deepEqual(projectEditSchema.parse({name:'Crop',slides:[slide]}).slides[0].crop,slide.crop);
+ const slide={id:'e579e7ae-5bb9-4e12-a5d3-c220d59d306a',position:0,headline:'Keep this part',body:'',assetQuery:'',assetId:null,template:'tiktok-outlined',textEmphasis:[],crop:{x:0.1,y:0.2,width:0.7,height:0.6},imageZoom:1.4};
+ const parsed=projectEditSchema.parse({name:'Crop',slides:[slide]}).slides[0];assert.deepEqual(parsed.crop,slide.crop);assert.equal(parsed.imageZoom,1.4);
  assert.throws(()=>projectEditSchema.parse({name:'Bad crop',slides:[{...slide,crop:{x:0.8,y:0,width:0.5,height:1}}]}));
+});
+
+test('image zoom is bounded in slide edits',async()=>{
+ const {projectEditSchema}=await import('../src/lib/creative');
+ const slide={id:'e579e7ae-5bb9-4e12-a5d3-c220d59d306a',position:0,headline:'Keep this part',body:'',assetQuery:'',assetId:null,template:'tiktok-outlined',textEmphasis:[]};
+ assert.equal(projectEditSchema.parse({name:'Zoom',slides:[{...slide,imageZoom:0.5}]}).slides[0].imageZoom,0.5);
+ assert.throws(()=>projectEditSchema.parse({name:'Bad zoom',slides:[{...slide,imageZoom:0.2}]}));
+ assert.throws(()=>projectEditSchema.parse({name:'Bad zoom',slides:[{...slide,imageZoom:3}]}));
 });
