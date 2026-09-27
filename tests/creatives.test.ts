@@ -80,3 +80,22 @@ test('slideshow drafts rewrite weak sales copy into useful Panoslice-safe list s
  }finally{rmSync(root,{recursive:true,force:true});}
 });
 
+test('slideshow quality fallback uses the app profile for non-photo apps',async()=>{
+ delete (globalThis as unknown as {forgeDb?:unknown}).forgeDb;
+ const root=mkdtempSync(path.join(tmpdir(),'forge-generic-profile-quality-'));process.env.FORGE_DATA_DIR=root;
+ try{
+  const app=createApp({name:'Lono',oneLineDescription:'Plan calm breathing sessions for better focus',features:['Box breathing timer','Daily calm reminders','Focus session history'],audiences:['busy students'],contentAngles:['exam stress reset','two minute calm routine'],keywords:['breathing','focus','stress']});
+  const bytes=await sharp({create:{width:300,height:500,channels:3,background:'#88aadd'}}).png().toBuffer();
+  const asset=await registerAsset({appId:app.id,bytes,filename:'calm-session.png',category:'MARKETING',sourceKind:'local',sourceKey:'generic-profile'});
+  const provider={async generateStructured<T>(_prompt:string,schema:z.ZodType<T>):Promise<T>{return schema.parse({slides:Array.from({length:6},(_,i)=>({headline:i===0?'Unlock stunning wellness vibes':`Elevate your life ${i}`,body:'Transform everything today',assetId:asset.id,assetQuery:'generic vibes'}))});}};
+  const {ideaBank}=await import('../src/lib/server/idea-bank');
+  const batch=ideaBank(app.id,'slideshow');
+  const project=await createProject(batch.id,0,provider,{imageSource:'local',slideCount:6,selectedAssetIds:[asset.id]});
+  const copy=project.slides.map(slide=>`${slide.headline} ${slide.body}`).join(' ').toLowerCase();
+  assert.equal(/photo dump|panoslice|camera roll|collage/.test(copy),false);
+  assert.match(copy,/breathing|focus|calm|stress|session|timer|student/);
+  assert.equal(project.slides.at(-1)?.headline,'Try Lono');
+  getDatabase().close();
+ }finally{rmSync(root,{recursive:true,force:true});}
+});
+
