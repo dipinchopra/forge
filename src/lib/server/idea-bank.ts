@@ -27,7 +27,7 @@ function photoTopics(type:OutputType,appName:string):Concept[]{
   ['The “main character” dump checklist','main character dump checklist','A format built around mood and identity, not product pitching.','aesthetic photo dump',['Outfit','Street or room','Close detail','Blurry candid','End card']],
   ['5 slides that make a dump feel full','5 slides that make a dump feel full','Show what to add so a photo dump feels richer and holds more memories.','mixed photo collage',['Problem','Add a close-up','Add a human moment','Add contrast','CTA']],
   ['Weekend dump slide order','weekend dump slide order','A clear order for weekend recaps that feels natural.','weekend photo dump',['Best moment first','Friends','Food','Place','Small detail','End']],
-  ['7 tiny details to include','7 tiny details to include','Teach why detail photos make the whole dump feel richer.','travel detail photos',['Hook','Detail examples','Why it works','Where to place it','CTA']],
+  ['Top 5 fonts for photo dumps','top 5 fonts for photo dumps','A trend-style list of font moods creators can use on photo dumps.','travel detail photos',['Clean serif','Handwritten','Bold sans','Condensed','Soft italic','CTA']],
   ['Photo dump prompts for comments','photo dump prompts for comments','Use interactive prompts that invite replies without sounding desperate.','instagram comments photos',['Pick a side','Guess the place','Which slide is you','Save the idea','CTA']],
  ];
  const carousel=[
@@ -36,9 +36,9 @@ function photoTopics(type:OutputType,appName:string):Concept[]{
   ['Photo dump checklist for trips','Photo dump checklist for trips','A travel-specific checklist built for saves and shares.','travel photo checklist',['Where you went','Who came','What you ate','What surprised you','Best view','Final mood']],
   ['What to post from a normal day','What to post from a normal day','Make everyday photo dumps feel easy and relatable.','everyday photo ideas',['Outfit','Coffee or snack','Sky or street','Desk or room','Small win','Funny detail']],
   ['Slides your photo dump is missing','Slides your photo dump is missing','Point out missing slide types that make people want to improve their next post.','photo dump missing slides',['A clear opener','A people slide','A texture slide','A funny slide','A quiet slide','A closer']],
-  ['Photo dump prompts people answer','Photo dump prompts people answer','Give engagement prompts that invite comments naturally.','social media photo prompts',['Which slide are you','Guess the place','Pick the best photo','Rate the weekend','Save this list']],
+  ['Photo dump prompts people answer','Photo dump prompts people answer','Give engagement prompts that invite comments naturally.','social media photo prompts',['Font lists','Color combos','Tiny details','Weekend formulas','Comment prompts']],
   ['The perfect weekend dump order','The perfect weekend dump order','Show a repeatable slide order for weekend recaps.','weekend photo dump order',['Best moment','People','Food','Place','Tiny detail','Ending']],
-  ['Tiny details to include','Tiny details to include','Teach detail shots that make posts feel more personal.','detail photos aesthetic',['Hands','Receipts','Food close-up','Shoes','Room corner','Street sign']],
+  ['Top 5 color combos for photo dumps','Top 5 color combos for photo dumps','A trend-style list of color pairings creators can save for their next dump.','detail photos aesthetic',['Butter yellow + white','Cherry red + cream','Sky blue + cocoa','Sage + black','Pink + espresso']],
   ['Photo dump mistakes to avoid','Photo dump mistakes to avoid','Keep it useful without pitching: weak first slide, no details, no people, no ending.','photo dump mistakes',['Weak first slide','No people','No tiny details','No place photo','No ending']],
   ['Camera roll scavenger hunt','Camera roll scavenger hunt','A playful checklist people can use right away.','camera roll scavenger hunt',['Find a laugh','Find a view','Find a meal','Find a blur','Find a tiny thing','Build the dump']],
   ['First slide ideas for photo dumps','First slide ideas for photo dumps','Help users choose an opener that earns the swipe.','instagram carousel cover',['Best face','Best view','Clean layout','Funny moment','Before-after','Question slide']],
@@ -64,7 +64,7 @@ export function ideaBank(appId:string,type:OutputType):ConceptBatch {
  const rows=getDatabase().prepare('SELECT id FROM concept_batches WHERE appId=? AND json_extract(input,\'$.type\')=? AND createdAt>=? ORDER BY createdAt DESC LIMIT 20').all(appId,type,app.updatedAt);
  for(const row of rows){const batch=getBatch(String(row.id));if(batch&&batch.concepts.length>=10&&batch.input.formula&&batch.provider==='topics-v1')return batch;}
  const concepts=(seed(app).isPhoto?photoTopics(type,app.name):genericTopics(type,app)).slice(0,12);
- const batch:ConceptBatch={id:randomUUID(),appId,input:{appId,type,start:'surprise',idea:'',selectedAssetIds:[],imageSource:'dupe',formula:'hpsc',slideCount:6},concepts,provider:'topics-v1',createdAt:new Date().toISOString()};
+ const batch:ConceptBatch={id:randomUUID(),appId,input:{appId,type,start:'surprise',idea:'',selectedAssetIds:[],imageSource:'dupe',formula:'hpsc',slideCount:6,textColor:'#ffffff'},concepts,provider:'topics-v1',createdAt:new Date().toISOString()};
  getDatabase().prepare('INSERT INTO concept_batches(id,appId,input,concepts,provider,createdAt) VALUES(?,?,?,?,?,?)').run(batch.id,appId,JSON.stringify(batch.input),JSON.stringify(concepts),batch.provider,batch.createdAt);
  return batch;
 }

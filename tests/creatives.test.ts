@@ -23,18 +23,20 @@ test('assets deduplicate per app; real project flow validates IDs, preserves cho
  try {
   const app=createApp({name:'Isolated creative test'}),other=createApp({name:'Other test'});
   const bytes=await sharp({create:{width:120,height:200,channels:3,background:'#bb7722'}}).png().toBuffer();
-  const input={appId:app.id,bytes,filename:'travel.png',category:'OUTPUT' as const,sourceKind:'upload' as const,sourceKey:'test'};
-  const asset=await registerAsset(input);assert.equal((await registerAsset(input)).id,asset.id);assert.equal(listAssets(app.id).length,1);
+  const storeBytes=await sharp({create:{width:120,height:200,channels:3,background:'#2255bb'}}).png().toBuffer();
+  const input={appId:app.id,bytes,filename:'travel.png',category:'OUTPUT' as const,sourceKind:'dupe' as const,sourceKey:'dupe-test'};
+  const asset=await registerAsset(input);assert.equal((await registerAsset(input)).id,asset.id);
+  const appStore=await registerAsset({...input,bytes:storeBytes,filename:'store.png',sourceKind:'app-store' as const,sourceKey:'store-test'});assert.equal(listAssets(app.id).length,2);
   const foreign=await registerAsset({...input,appId:other.id});
   assert.throws(()=>chooseAssets(listAssets(app.id),[foreign.id]));
   let calls=0;
   const provider={async generateStructured<T>(_prompt:string,schema:z.ZodType<T>,images?:string[]):Promise<T>{
     calls++;assert.equal(images?.length,1);
-    return schema.parse(calls===1?{concepts:Array.from({length:12},(_,i)=>i).map(index=>({title:`Concept ${index}`,hook:`Hook ${index}`,angle:'Travel collage ideas',outline:['Hook','First tip','Second tip','CTA'],assetIds:[asset.id]}))}:{slides:Array.from({length:6},(_,index)=>({headline:`Slide ${index}`,body:'A little detail',assetId:null,assetQuery:'travel'}))});
+    return schema.parse(calls===1?{concepts:Array.from({length:12},(_,i)=>i).map(index=>({title:`Concept ${index}`,hook:`Hook ${index}`,angle:'Travel collage ideas',outline:['Hook','First tip','Second tip','CTA'],assetIds:[asset.id]}))}:{slides:Array.from({length:6},(_,index)=>({headline:`Slide ${index}`,body:'A little detail',assetId:index<5?appStore.id:null,assetQuery:'travel'}))});
   }};
   const batch=await generateConcepts({appId:app.id,start:'idea',type:'slideshow',idea:'Travel photo dump',selectedAssetIds:[asset.id]},provider);
   assert.equal(batch.concepts.length,12);
-  const project=await createProject(batch.id,0,provider);assert.equal(project.slides.length,6);assert.ok(project.slides.every(slide=>slide.assetId===asset.id),'project creation fills blank slide images from available assets');assert.equal(project.style.fontFamily,'TikTok Sans');assert.equal(project.style.textColor,'#ffffff');assert.equal(project.style.strokeColor,'#000000');
+  const project=await createProject(batch.id,0,provider);assert.equal(project.slides.length,6);assert.ok(project.slides.slice(0,-1).every(slide=>slide.assetId===asset.id),'slideshow body slides use Dupe/Pinterest images instead of App Store screenshots');assert.equal(project.style.fontFamily,'TikTok Sans');assert.equal(project.style.textColor,'#ffffff');assert.equal(project.style.strokeColor,'#000000');
   assert.equal((await createProject(batch.id,0,provider)).id,project.id);assert.equal(calls,2,'retry must not consume another AI call');
   assert.equal(listAssets(app.id)[0].usageCount,1);
   const edited=saveProject(project.id,'Edited title',project.slides.map((slide,index)=>({...slide,headline:index===0?'New hook':slide.headline})));
