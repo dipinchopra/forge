@@ -60,3 +60,23 @@ test('bulk drafts use one provider call and retries reuse saved projects',async(
   getDatabase().close();
  }finally{rmSync(root,{recursive:true,force:true});}
 });
+
+test('slideshow drafts rewrite weak sales copy into useful Panoslice-safe list slides',async()=>{
+ delete (globalThis as unknown as {forgeDb?:unknown}).forgeDb;
+ const root=mkdtempSync(path.join(tmpdir(),'forge-slideshow-quality-'));process.env.FORGE_DATA_DIR=root;
+ try{
+  const app=createApp({name:'Panoslice',oneLineDescription:'Create swipeable photo collages for photo dumps',features:['Share more photos in seamless carousel layouts'],keywords:['photo dump','collage','carousel']});
+  const bytes=await sharp({create:{width:300,height:500,channels:3,background:'#f2c66d'}}).png().toBuffer();
+  const asset=await registerAsset({appId:app.id,bytes,filename:'beach-detail.png',category:'MARKETING',sourceKind:'dupe',sourceKey:'quality-dupe'});
+  const provider={async generateStructured<T>(_prompt:string,schema:z.ZodType<T>):Promise<T>{return schema.parse({slides:Array.from({length:6},(_,i)=>({headline:i===0?'Unlock stunning visual storytelling':i===1?'Include less photos':`Elevate your memories ${i}`,body:'Transform your content today',assetId:asset.id,assetQuery:'generic vibes'}))});}};
+  const {ideaBank}=await import('../src/lib/server/idea-bank');
+  const batch=ideaBank(app.id,'slideshow');
+  const project=await createProject(batch.id,0,provider,{imageSource:'local',slideCount:6,selectedAssetIds:[asset.id]});
+  const copy=project.slides.map(slide=>`${slide.headline} ${slide.body}`).join(' ').toLowerCase();
+  assert.equal(/include less|fewer photos|unlock|elevate|transform/.test(copy),false);
+  assert.ok(project.slides.some(slide=>/people|tiny detail|messy|food|cover|closer|layout/i.test(slide.headline)),copy);
+  assert.equal(project.slides.at(-1)?.headline,'Try Panoslice');
+  getDatabase().close();
+ }finally{rmSync(root,{recursive:true,force:true});}
+});
+

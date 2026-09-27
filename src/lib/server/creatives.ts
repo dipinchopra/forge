@@ -15,6 +15,7 @@ import { dataRoot } from './storage';
 import { CodexProvider } from './providers/codex';
 import { getInspiration } from './lurker';
 import { ImportError } from './import-errors';
+import {improveSlideshowSlides} from './slide-quality';
 
 export function getBatch(id:string):ConceptBatch|null {
   const row=getDatabase().prepare('SELECT * FROM concept_batches WHERE id=?').get(id);
@@ -119,6 +120,7 @@ When an external image source is unavailable, still write the full useful narrat
 PREVIOUS DRAFTS TO DIFFER FROM: ${JSON.stringify(getDatabase().prepare('SELECT slides FROM projects WHERE appId=? AND name=? ORDER BY createdAt DESC LIMIT 3').all(app.id,concept.title).map(row=>JSON.parse(String(row.slides)).map((s:{headline:string})=>s.headline)))}
 SELECTED: ${JSON.stringify(batch.input.selectedAssetIds)}
 CATALOG: ${JSON.stringify(context.catalog)}`,slideDraftSchemaFor(slideCount),context.paths);
+    result.slides=improveSlideshowSlides(batch.input.type,concept,result.slides,slideCount);
     const valid=new Set(assets.map(asset=>asset.id));
     // Explicit selections must remain represented in the editable result.
     batch.input.selectedAssetIds.slice(0,result.slides.length).forEach((id,index)=>{
